@@ -26,6 +26,8 @@
     min-height:100vh;
     overflow-x:hidden;
   }
+
+  /* ── MUSIC TOGGLE ── */
   .music-btn{
     position:fixed;top:16px;right:16px;z-index:999;
     background:var(--white);border:none;border-radius:50px;
@@ -40,6 +42,8 @@
   .music-note{font-size:16px;animation:bounce-note 1.5s infinite}
   @keyframes bounce-note{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-4px) rotate(10deg)}}
   .music-note.paused{animation:none}
+
+  /* ── PROGRESS ── */
   .progress-wrap{
     position:fixed;top:0;left:0;right:0;height:4px;z-index:998;
     background:rgba(255,122,61,0.15);
@@ -49,6 +53,8 @@
     transition:width .5s cubic-bezier(.4,0,.2,1);
     border-radius:0 4px 4px 0;
   }
+
+  /* ── SCREENS ── */
   .screen{
     min-height:100vh;display:flex;flex-direction:column;
     align-items:center;justify-content:center;
@@ -58,6 +64,8 @@
   }
   .screen.active{opacity:1;transform:translateY(0)}
   .screen.done{opacity:0;transform:translateY(-30px);pointer-events:none;position:absolute;width:100%}
+
+  /* ── CAT ── */
   .cat-wrap{
     position:fixed;bottom:0;left:50%;transform:translateX(-50%);
     width:100%;max-width:480px;
@@ -68,6 +76,11 @@
   .cat-container{position:relative;width:120px;flex-shrink:0}
   .cat-svg{width:120px;height:120px;animation:cat-idle 3s ease-in-out infinite}
   @keyframes cat-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .cat-svg.thinking{animation:cat-think 0.5s ease-in-out infinite alternate}
+  @keyframes cat-think{0%{transform:rotate(-3deg)}100%{transform:rotate(3deg)}}
+  .cat-svg.happy{animation:cat-happy 0.4s ease-in-out 3}
+  @keyframes cat-happy{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.05)}}
+
   .speech-bubble{
     position:absolute;bottom:105px;left:5px;
     background:var(--white);border-radius:18px 18px 18px 4px;
@@ -85,6 +98,8 @@
     content:'';position:absolute;bottom:-10px;left:14px;
     border:5px solid transparent;border-top-color:var(--white);
   }
+
+  /* ── CONTENT CARDS ── */
   .content-box{
     width:100%;max-width:440px;
     background:var(--white);border-radius:24px;
@@ -107,6 +122,8 @@
     font-family:'Sarabun',sans-serif;font-size:14px;color:var(--muted);
     line-height:1.6;margin-bottom:24px;
   }
+
+  /* ── CHOICES ── */
   .choices{display:flex;flex-direction:column;gap:10px;width:100%;max-width:440px}
   .choice-btn{
     background:var(--white);border:1.5px solid #E8E0D8;
@@ -126,15 +143,17 @@
     transform:translateX(4px);
   }
   .choice-emoji{font-size:20px;flex-shrink:0}
+
+  /* ── TEXT INPUT ── */
   .text-input-wrap{width:100%;max-width:440px;margin-top:4px}
-  .text-input-wrap input{
+  .text-input-wrap input,.text-input-wrap select{
     width:100%;padding:14px 18px;
     border:1.5px solid #E8E0D8;border-radius:16px;
     font-family:'Sarabun',sans-serif;font-size:16px;color:var(--charcoal);
     background:var(--white);outline:none;
     transition:border-color .2s;
   }
-  .text-input-wrap input:focus{border-color:var(--orange)}
+  .text-input-wrap input:focus,.text-input-wrap select:focus{border-color:var(--orange)}
   .next-btn{
     margin-top:12px;width:100%;padding:15px;
     background:var(--orange);color:var(--white);border:none;border-radius:16px;
@@ -144,10 +163,14 @@
   }
   .next-btn:hover{background:#e86830;transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,122,61,0.35)}
   .next-btn:disabled{background:#E8E0D8;color:var(--muted);transform:none;cursor:not-allowed}
+
+  /* ── RANGE SLIDER ── */
   .range-wrap{width:100%;max-width:440px;background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--orange-light)}
   .range-wrap input[type=range]{width:100%;margin:10px 0;accent-color:var(--orange)}
   .range-val{font-family:'Mitr',sans-serif;font-size:28px;font-weight:600;color:var(--orange);text-align:center}
   .range-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+
+  /* ── INTRO SCREEN ── */
   .intro-emoji{font-size:80px;animation:float 3s ease-in-out infinite;display:block;text-align:center;margin-bottom:16px}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
   .intro-title{font-family:'Mitr',sans-serif;font-size:32px;font-weight:600;text-align:center;line-height:1.3;margin-bottom:8px;color:var(--charcoal)}
@@ -161,6 +184,8 @@
   }
   @keyframes pulse-btn{0%,100%{box-shadow:0 6px 24px rgba(255,122,61,0.35)}50%{box-shadow:0 6px 36px rgba(255,122,61,0.55)}}
   .start-btn:hover{transform:translateY(-3px) scale(1.03)}
+
+  /* ── RESULT / FINAL ── */
   .result-card{
     width:100%;max-width:440px;
     background:var(--white);border-radius:24px;padding:28px;
@@ -185,6 +210,8 @@
   .confetti-wrap{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:200}
   .confetti{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall linear forwards}
   @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+  /* ── MULTI-SELECT ── */
   .multi-choices{display:flex;flex-wrap:wrap;gap:8px;width:100%;max-width:440px}
   .multi-chip{
     padding:8px 16px;border-radius:50px;
@@ -194,6 +221,7 @@
   }
   .multi-chip:hover{border-color:var(--orange);background:var(--orange-light)}
   .multi-chip.selected{border-color:var(--orange);background:var(--orange);color:var(--white)}
+
   .bottom-pad{height:140px}
   .step-indicator{
     position:fixed;bottom:130px;left:50%;transform:translateX(-50%);
@@ -201,6 +229,33 @@
     background:rgba(255,255,255,.9);padding:4px 12px;border-radius:20px;
     backdrop-filter:blur(8px);z-index:99;
   }
+
+  /* ── CAT TYPE RESULT ── */
+  .cat-type-card{
+    width:100%;max-width:440px;
+    background:var(--white);border-radius:24px;padding:28px;
+    box-shadow:var(--shadow);border:1.5px solid var(--orange-light);
+    margin-bottom:12px;text-align:center;
+  }
+  .cat-type-emoji{font-size:80px;display:block;margin-bottom:12px;animation:float 3s ease-in-out infinite}
+  .cat-type-name{font-family:'Mitr',sans-serif;font-size:22px;font-weight:600;color:var(--charcoal);margin-bottom:4px}
+  .cat-type-nick{font-family:'Mitr',sans-serif;font-size:15px;font-weight:400;color:var(--orange);margin-bottom:14px}
+  .cat-type-desc{font-family:'Sarabun',sans-serif;font-size:14px;color:#555;line-height:1.7;text-align:left;
+    background:var(--cream);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+  .cat-type-tips{text-align:left;background:#F0FFF4;border-radius:14px;padding:14px 16px;
+    border-left:4px solid #48C774;}
+  .cat-type-tips-title{font-family:'Mitr',sans-serif;font-size:13px;font-weight:500;color:#2d6a4f;margin-bottom:8px}
+  .cat-type-tip{font-family:'Sarabun',sans-serif;font-size:13px;color:#2d6a4f;line-height:1.7;margin-bottom:4px}
+  .sheet-btn{
+    width:100%;max-width:440px;padding:16px;
+    background:#34A853;color:var(--white);border:none;border-radius:16px;
+    font-family:'Mitr',sans-serif;font-size:16px;font-weight:500;
+    cursor:pointer;margin-bottom:10px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:all .2s;box-shadow:0 4px 16px rgba(52,168,83,0.3);
+    text-decoration:none;
+  }
+  .sheet-btn:hover{background:#2d9248;transform:translateY(-2px);box-shadow:0 8px 24px rgba(52,168,83,0.4)}
 </style>
 </head>
 <body>
@@ -211,30 +266,44 @@
   <span id="music-label">เปิดเพลง</span>
 </button>
 
+<!-- CAT FIXED -->
 <div class="cat-wrap">
   <div class="cat-container">
     <div class="speech-bubble" id="speech"></div>
     <svg class="cat-svg" id="cat-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
       <ellipse cx="60" cy="88" rx="34" ry="28" fill="#FF9A5C"/>
+      <!-- belly -->
       <ellipse cx="60" cy="92" rx="20" ry="18" fill="#FFD4A8"/>
+      <!-- head -->
       <ellipse cx="60" cy="56" rx="30" ry="28" fill="#FF9A5C"/>
+      <!-- ears -->
       <polygon points="34,34 28,14 46,28" fill="#FF9A5C"/>
       <polygon points="86,34 92,14 74,28" fill="#FF9A5C"/>
+      <!-- inner ears -->
       <polygon points="35,32 31,18 44,29" fill="#FFB8C6"/>
       <polygon points="85,32 89,18 76,29" fill="#FFB8C6"/>
+      <!-- eyes -->
       <ellipse cx="50" cy="52" rx="6" ry="7" fill="#2D2D2D" id="eye-l"/>
       <ellipse cx="70" cy="52" rx="6" ry="7" fill="#2D2D2D" id="eye-r"/>
+      <!-- eye shine -->
       <circle cx="52" cy="50" r="2" fill="white"/>
       <circle cx="72" cy="50" r="2" fill="white"/>
+      <!-- nose -->
       <ellipse cx="60" cy="62" rx="4" ry="3" fill="#FF7A9A"/>
+      <!-- mouth -->
       <path d="M56 65 Q60 69 64 65" stroke="#FF7A9A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- whiskers -->
       <line x1="30" y1="60" x2="52" y2="63" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
       <line x1="30" y1="65" x2="52" y2="65" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
       <line x1="68" y1="63" x2="90" y2="60" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
       <line x1="68" y1="65" x2="90" y2="65" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
+      <!-- tail -->
       <path d="M92 100 Q110 80 104 64 Q98 52 108 46" stroke="#FF9A5C" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <!-- paws -->
       <ellipse cx="44" cy="112" rx="12" ry="8" fill="#FF9A5C"/>
       <ellipse cx="76" cy="112" rx="12" ry="8" fill="#FF9A5C"/>
+      <!-- stripe -->
       <path d="M50 36 Q60 32 70 36" stroke="#E8824A" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
       <path d="M52 30 Q60 26 68 30" stroke="#E8824A" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
     </svg>
@@ -242,17 +311,23 @@
 </div>
 <div class="step-indicator" id="step-ind" style="display:none"></div>
 
+<!-- ════════════════════════════════ SCREENS ════════════════════════════════ -->
+
+<!-- SCREEN 0: INTRO -->
 <div class="screen active" id="s0" style="text-align:center;padding-top:100px">
   <span class="intro-emoji">🐱</span>
   <h1 class="intro-title">สวัสดีจ้า!<br>ฉันชื่อ มะโหนก 🧡</h1>
   <p class="intro-sub">แมวส้มผู้ช่วยวางแผนการเงิน<br>วันนี้ฉันจะพาไปค้นหาว่า<br><strong>เงินของเธอหายไปไหน</strong> แล้วจัดระเบียบมันใหม่ด้วยกันนะ 🐾</p>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:24px">ใช้เวลาแค่ 3-4 นาที · ง่ายมาก · ไม่ตัดสิน</p>
   <button class="start-btn" onclick="startQuiz()">เริ่มเลย! เมี้ยว 🐾</button>
 </div>
 
+<!-- SCREEN 1: ชื่อ -->
 <div class="screen" id="s1">
   <div class="content-box">
     <span class="screen-tag">👋 รู้จักกันก่อนนะ</span>
     <div class="screen-q">เธอชื่ออะไรอ่ะ? 🐾</div>
+    <div class="screen-sub">มะโหนกจะได้เรียกชื่อถูก ๆ</div>
     <div class="text-input-wrap">
       <input type="text" id="q_name" placeholder="พิมพ์ชื่อเลยจ้า..." oninput="checkInput('q_name','btn1')"/>
     </div>
@@ -260,10 +335,12 @@
   <button class="next-btn" id="btn1" disabled onclick="nextScreen()">ต่อไปเลย 🐾</button>
 </div>
 
+<!-- SCREEN 2: อายุ range -->
 <div class="screen" id="s2">
   <div class="content-box">
     <span class="screen-tag">🎂 อายุ</span>
     <div class="screen-q">เธออายุเท่าไหร่แล้วอ่ะ?</div>
+    <div class="screen-sub">ไม่ได้จะแอบบอกใคร สัญญา 🤫</div>
   </div>
   <div class="range-wrap">
     <div class="range-val" id="age-val">25 ปี</div>
@@ -273,23 +350,27 @@
   <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:12px">โอเคเลย 👌</button>
 </div>
 
+<!-- SCREEN 3: สถานภาพ -->
 <div class="screen" id="s3">
   <div class="content-box">
     <span class="screen-tag">💑 ชีวิตส่วนตัว</span>
     <div class="screen-q">ตอนนี้เป็นยังไงบ้างอ่ะ?</div>
+    <div class="screen-sub">ถามเพื่อวางแผนให้เหมาะสมนะ ไม่ได้แอบชอบนะ 🙈</div>
   </div>
   <div class="choices">
     <button class="choice-btn" onclick="pick('q_status','โสด',this)"><span class="choice-emoji">🐱</span> โสดและภูมิใจ</button>
     <button class="choice-btn" onclick="pick('q_status','แต่งงานแล้ว',this)"><span class="choice-emoji">💑</span> แต่งงานแล้ว / มีคู่</button>
-    <button class="choice-btn" onclick="pick('q_status','มีลูก',this)"><span class="choice-emoji">👨‍👩‍👧</span> มีลูกแล้ว</button>
+    <button class="choice-btn" onclick="pick('q_status','มีลูก',this)"><span class="choice-emoji">👨‍👩‍👧</span> มีลูกแล้ว (หรือกำลังจะมี)</button>
     <button class="choice-btn" onclick="pick('q_status','ดูแลพ่อแม่',this)"><span class="choice-emoji">🏠</span> ต้องดูแลพ่อแม่ด้วย</button>
   </div>
 </div>
 
+<!-- SCREEN 4: อาชีพ -->
 <div class="screen" id="s4">
   <div class="content-box">
     <span class="screen-tag">💼 งาน</span>
     <div class="screen-q">ทำอะไรอยู่ตอนนี้?</div>
+    <div class="screen-sub">รายได้ของเธอมาจากไหน? 🤔</div>
   </div>
   <div class="choices">
     <button class="choice-btn" onclick="pick('q_job','พนักงานบริษัท',this)"><span class="choice-emoji">🏢</span> พนักงานบริษัท / ราชการ</button>
@@ -300,10 +381,12 @@
   </div>
 </div>
 
+<!-- SCREEN 5: รายได้ -->
 <div class="screen" id="s5">
   <div class="content-box">
     <span class="screen-tag">💰 รายได้</span>
     <div class="screen-q">แต่ละเดือนได้ประมาณเท่าไหร่?</div>
+    <div class="screen-sub">นับรวมทุกทาง ทั้งเงินเดือน งานเสริม ฯลฯ</div>
   </div>
   <div class="choices">
     <button class="choice-btn" onclick="pick('q_income','น้อยกว่า 15,000',this)"><span class="choice-emoji">🌱</span> น้อยกว่า 15,000 บาท</button>
@@ -314,10 +397,12 @@
   </div>
 </div>
 
+<!-- SCREEN 6: เงินออมได้ -->
 <div class="screen" id="s6">
   <div class="content-box">
     <span class="screen-tag">🐷 การออม</span>
     <div class="screen-q">ออมได้เดือนละกี่เปอร์เซ็นต์ของรายได้?</div>
+    <div class="screen-sub">ตอบตามความจริงนะ ไม่ตัดสิน ฉันแค่แมวส้ม 🧡</div>
   </div>
   <div class="choices">
     <button class="choice-btn" onclick="pick('q_save','ไม่มีเลย ใช้หมดทุกเดือน',this)"><span class="choice-emoji">😅</span> ไม่มีเลย ใช้หมดทุกเดือน</button>
@@ -328,10 +413,12 @@
   </div>
 </div>
 
+<!-- SCREEN 7: หนี้สิน -->
 <div class="screen" id="s7">
   <div class="content-box">
     <span class="screen-tag">💳 หนี้สิน</span>
-    <div class="screen-q">มีหนี้อยู่บ้างไหม? (เลือกได้หลายข้อ)</div>
+    <div class="screen-q">มีหนี้อยู่บ้างไหม?</div>
+    <div class="screen-sub">เลือกได้หลายอย่างเลยนะ ไม่ตัดสิน มะโหนกก็เคยเป็นหนี้ค่าอาหารแมว 🐟</div>
   </div>
   <div class="multi-choices" id="debt-mc">
     <div class="multi-chip" onclick="multiPick('q_debt','ไม่มีหนี้เลย!',this)">😇 ไม่มีหนี้!</div>
@@ -344,10 +431,12 @@
   <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">ต่อไปเลย</button>
 </div>
 
+<!-- SCREEN 8: เป้าหมาย -->
 <div class="screen" id="s8">
   <div class="content-box">
     <span class="screen-tag">🎯 เป้าหมาย</span>
-    <div class="screen-q">อยากได้อะไรจากเงินของเธอ? (หลายข้อได้)</div>
+    <div class="screen-q">อยากได้อะไรจากเงินของเธอ?</div>
+    <div class="screen-sub">เลือกทุกอย่างที่อยู่ในใจเลย ฝันใหญ่ ๆ ก็ได้ 🌟</div>
   </div>
   <div class="multi-choices">
     <div class="multi-chip" onclick="multiPick('q_goal','เกษียณสบาย',this)">🏖️ เกษียณสบาย</div>
@@ -360,27 +449,31 @@
     <div class="multi-chip" onclick="multiPick('q_goal','จ่ายหนี้ให้หมด',this)">🎉 จ่ายหนี้ให้หมด</div>
     <div class="multi-chip" onclick="multiPick('q_goal','มีเงินสำรอง',this)">🏦 มีเงินสำรองฉุกเฉิน</div>
   </div>
-  <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">ตกลงตามนี้ 🐾</button>
+  <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">นั่นแหละ! ต่อเลย 🐾</button>
 </div>
 
+<!-- SCREEN 9: ความเสี่ยง -->
 <div class="screen" id="s9">
   <div class="content-box">
     <span class="screen-tag">⚖️ ความเสี่ยง</span>
-    <div class="screen-q">ถ้าลงทุนแล้วเงินลด 20% เธอจะทำยังไง?</div>
+    <div class="screen-q">ถ้าลงทุนแล้วเงินลด 20%<br>เธอจะทำยังไง?</div>
+    <div class="screen-sub">ตอบตามความรู้สึกจริง ๆ ของเธอนะ 🤔</div>
   </div>
   <div class="choices">
     <button class="choice-btn" onclick="pick('q_risk','ต่ำ',this)"><span class="choice-emoji">😱</span> ขายทิ้งเลย! ทนไม่ไหว</button>
     <button class="choice-btn" onclick="pick('q_risk','ต่ำ-กลาง',this)"><span class="choice-emoji">😟</span> กังวลมาก แต่ยังถือไว้ก่อน</button>
-    <button class="choice-btn" onclick="pick('q_risk','กลาง',this)"><span class="choice-emoji">😐</span> ก็กังวลนิดหน่อย รอดูก่อน</button>
+    <button class="choice-btn" onclick="pick('q_risk','กลาง',this)"><span class="choice-emoji">😐</span> ก็กังวลนิดหน่อย รอดูก่อนแล้วกัน</button>
     <button class="choice-btn" onclick="pick('q_risk','กลาง-สูง',this)"><span class="choice-emoji">😏</span> โอเค ซื้อเพิ่มไปเลย ถูกดี</button>
     <button class="choice-btn" onclick="pick('q_risk','สูง',this)"><span class="choice-emoji">😎</span> ดีเลย ซื้อซ้ำ 2 เท่า!</button>
   </div>
 </div>
 
+<!-- SCREEN 10: ประสบการณ์ลงทุน -->
 <div class="screen" id="s10">
   <div class="content-box">
     <span class="screen-tag">📊 การลงทุน</span>
-    <div class="screen-q">เคยลงทุนอะไรบ้างแล้ว? (หลายข้อได้)</div>
+    <div class="screen-q">เคยลงทุนอะไรบ้างแล้ว?</div>
+    <div class="screen-sub">เลือกทุกอย่างที่เคยทำได้เลย 👇</div>
   </div>
   <div class="multi-choices">
     <div class="multi-chip" onclick="multiPick('q_invest','ยังไม่เคยเลย',this)">🌱 ยังไม่เคย</div>
@@ -395,10 +488,12 @@
   <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">ต่อเลย!</button>
 </div>
 
+<!-- SCREEN 11: ปัญหาใหญ่สุด -->
 <div class="screen" id="s11">
   <div class="content-box">
     <span class="screen-tag">🔍 ปัญหา</span>
-    <div class="screen-q">ปัญหาใหญ่สุดของเธอตอนนี้คืออะไร?</div>
+    <div class="screen-q">ถามตรง ๆ เลยนะ 👀<br>ปัญหาใหญ่สุดของเธอตอนนี้คืออะไร?</div>
+    <div class="screen-sub">เลือกอันที่ "ใช่" ที่สุดก็พอ</div>
   </div>
   <div class="choices">
     <button class="choice-btn" onclick="pick('q_problem','ใช้เงินเก่งมาก ออมไม่อยู่',this)"><span class="choice-emoji">💸</span> ใช้เงินเก่งมาก ออมไม่อยู่</button>
@@ -409,44 +504,54 @@
   </div>
 </div>
 
-<!-- 🐾 คำถามใหม่: ประเภทแมวตามนิสัยการเงิน 🐾 -->
+<!-- SCREEN 12: เบอร์/Line -->
 <div class="screen" id="s12">
-  <div class="content-box">
-    <span class="screen-tag">🐾 ประเภทแมว</span>
-    <div class="screen-q">ถ้านิยามตัวเองเป็น 'แมว' คิดว่าเป็นแมวแบบไหน?</div>
-    <p class="screen-sub">บอกสไตล์ความแสบและความเป็นตัวเองหน่อยเมี้ยว!</p>
-  </div>
-  <div class="choices">
-    <button class="choice-btn" onclick="pick('q_cat_type','แมวส้มสุดซ่า (สายลุย กล้าเสี่ยง ชอบของใหม่)',this)"><span class="choice-emoji">🦁</span> แมวส้มสุดซ่า (สายลุย กล้าเสี่ยง ชอบของใหม่)</button>
-    <button class="choice-btn" onclick="pick('q_cat_type','แมวบ้านรักสงบ (เซฟโซน ปลอดภัย ออมเงียบๆ)',this)"><span class="choice-emoji">🍞</span> แมวบ้านรักสงบ (เซฟโซน ปลอดภัย ออมเงียบๆ)</button>
-    <button class="choice-btn" onclick="pick('q_cat_type','แมวหยิ่งสายเปย์ (ใช้เงินซื้อความสุข ของมันต้องมี)',this)"><span class="choice-emoji">💅</span> แมวหยิ่งสายเปย์ (ใช้เงินซื้อความสุข ของมันต้องมี)</button>
-    <button class="choice-btn" onclick="pick('q_cat_type','แมวป่าหาสมบัติ (นักล่าโอกาส ชอบลงทุนท้าทาย)',this)"><span class="choice-emoji">🐆</span> แมวป่าหาสมบัติ (นักล่าโอกาส ชอบลงทุนท้าทาย)</button>
-  </div>
-</div>
-
-<div class="screen" id="s13">
   <div class="content-box">
     <span class="screen-tag">📱 ติดต่อ</span>
     <div class="screen-q">จะได้ส่งแผนให้เธอนะ!<br>ฝากเบอร์หรือ LINE ไว้ได้เลย 🐾</div>
+    <div class="screen-sub">ข้อมูลใช้เพื่อติดต่อเท่านั้น สัญญา</div>
     <div class="text-input-wrap" style="margin-bottom:12px">
-      <input type="tel" id="q_phone" placeholder="เบอร์โทรหรือ LINE ID..." oninput="checkInput('q_phone','btn13')"/>
+      <input type="tel" id="q_phone" placeholder="เบอร์โทรหรือ LINE ID..." oninput="checkInput('q_phone','btn12')"/>
     </div>
     <div class="text-input-wrap">
       <input type="email" id="q_email" placeholder="อีเมล (ไม่บังคับ)"/>
     </div>
   </div>
-  <button class="next-btn" id="btn13" disabled onclick="showResult()">ดูผลเลย! 🎉</button>
+  <button class="next-btn" id="btn12" disabled onclick="showResult()">ดูผลเลย! 🎉</button>
 </div>
 
-<div class="screen" id="s14">
+<!-- SCREEN 13: RESULT -->
+<div class="screen" id="s13">
   <div class="confetti-wrap" id="confetti"></div>
   <div style="text-align:center;margin-bottom:20px">
     <div style="font-size:48px;margin-bottom:8px">🎉</div>
     <div style="font-family:'Mitr',sans-serif;font-size:24px;font-weight:600;margin-bottom:4px" id="result-title">เยี่ยมมาก!</div>
+    <div style="font-size:14px;color:var(--muted)">มะโหนกวิเคราะห์แล้ว... เธอคือ</div>
+  </div>
+
+  <!-- CAT TYPE CARD -->
+  <div class="cat-type-card" id="cat-type-card">
+    <span class="cat-type-emoji" id="ct-emoji">🐱</span>
+    <div class="cat-type-name" id="ct-name"></div>
+    <div class="cat-type-nick" id="ct-nick"></div>
+    <div class="cat-type-desc" id="ct-desc"></div>
+    <div class="cat-type-tips">
+      <div class="cat-type-tips-title">🐾 มะโหนกแนะนำ:</div>
+      <div id="ct-tips"></div>
+    </div>
+  </div>
+
+  <div style="font-family:'Mitr',sans-serif;font-size:14px;color:var(--muted);text-align:center;max-width:440px;margin-bottom:12px">
+    📋 ข้อมูลของเธอทั้งหมด
   </div>
   <div class="result-card" id="result-card"></div>
+
+  <a class="sheet-btn" id="sheet-link" href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit" target="_blank">
+    📋 ดูข้อมูลใน Google Sheet
+  </a>
   <button class="dl-btn" onclick="downloadExcel()">📊 ดาวน์โหลด Excel เพื่อวิเคราะห์</button>
   <button class="dl-btn secondary" onclick="downloadCSV()">📄 ดาวน์โหลด CSV</button>
+  <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px;max-width:440px">มะโหนกขอบคุณมากเลย 🧡<br>ที่ปรึกษาจะติดต่อกลับเร็ว ๆ นี้นะ!</div>
   <div class="bottom-pad"></div>
 </div>
 
@@ -454,133 +559,379 @@
 
 <script>
 // ─── DATA ───
-// 🚨 นำลิงก์ Web App URL จากกูเกิ้ลชีตของคุณมาวางแทนข้อความภาษาไทยในเครื่องหมายคำพูดได้เลยครับ!
-const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyn1s4C-xfTKgHL2koOi4v97cLgSCf04VpnMHW0CRSczKVXly3qoxgXApStwN4stT0C/exec";
-
 const answers = {};
 const multiAnswers = {};
 let currentScreen = 0;
-const totalScreens = 14; 
+const totalScreens = 13;
 let audioCtx = null;
 let musicPlaying = false;
 let musicInterval = null;
 
+// ─── CAT SPEECHES per screen ───
 const speeches = [
-  '', 'เมี้ยว~ บอกชื่อมาได้เลยนะ!', 'อ่อ อายุขนาดนี้เหรอ! ดีมาก ๆ', 'โอเค ๆ จดไว้แล้ว',
-  'งานดี = เงินดี เริ่มต้นดีนะ!', 'รู้จักรายได้แล้ว มาต่อกันเลย', 'เมี้ยว~ ออมได้มากยิ่งดีนะ!',
-  'หนี้เป็นเรื่องปกติ แก้ได้จ้า', 'เป้าหมายชัด = ทำสำเร็จง่าย!', 'ตอบตามใจเลยนะ ไม่มีผิดถูก',
-  'ลงทุนเก่งแล้ว หรือเพิ่งเริ่มก็ดี!', 'ซื่อสัตย์กับตัวเองได้ ดีมากเลย', 'คุณเป็นแมวแบบไหนกันนะ? อยากรู้จัง!', 'เกือบเสร็จแล้ว! เมี้ยว~ 🧡'
+  '', // s0 handled separately
+  'เมี้ยว~ บอกชื่อมาได้เลยนะ!',
+  'อ่อ อายุขนาดนี้เหรอ! ดีมาก ๆ',
+  'โอเค ๆ จดไว้แล้ว',
+  'งานดี = เงินดี เริ่มต้นดีนะ!',
+  'รู้จักรายได้แล้ว มาต่อกันเลย',
+  'เมี้ยว~ ออมได้มากยิ่งดีนะ!',
+  'หนี้เป็นเรื่องปกติ แก้ได้จ้า',
+  'เป้าหมายชัด = ทำสำเร็จง่าย!',
+  'ตอบตามใจเลยนะ ไม่มีผิดถูก',
+  'ลงทุนเก่งแล้ว หรือเพิ่งเริ่มก็ดี!',
+  'ซื่อสัตย์กับตัวเองได้ ดีมากเลย',
+  'เกือบเสร็จแล้ว! เมี้ยว~ 🧡',
 ];
 
-function initAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+// ─── AUDIO ENGINE ───
+function initAudio(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+}
+
 function playNote(freq, duration, type='sine', gain=0.3){
   if(!audioCtx || !musicPlaying) return;
-  const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-  osc.connect(g); g.connect(audioCtx.destination); osc.type = type;
-  osc.frequency.setValueAtTime(freq, audioCtx.currentTime); g.gain.setValueAtTime(0, audioCtx.currentTime);
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.connect(g); g.connect(audioCtx.destination);
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  g.gain.setValueAtTime(0, audioCtx.currentTime);
   g.gain.linearRampToValueAtTime(gain, audioCtx.currentTime + 0.01);
   g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-  osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + duration);
+  osc.start(audioCtx.currentTime);
+  osc.stop(audioCtx.currentTime + duration);
 }
-function playChime(){ [523.25, 659.25, 783.99, 1046.5].forEach((f,i) => setTimeout(()=>playNote(f,.4,'sine',.2), i*120)); }
-function playClick(){ playNote(880, 0.1, 'sine', 0.15); }
-function playSuccess(){ [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i) => setTimeout(()=>playNote(f,.35,'sine',.22), i*100)); }
 
-const melody = [523.25,587.33,659.25,698.46,783.99,698.46,659.25,587.33];
+function playChime(){
+  const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+  notes.forEach((f,i) => setTimeout(()=>playNote(f,.4,'sine',.2), i*120));
+}
+
+function playClick(){
+  playNote(880, 0.1, 'sine', 0.15);
+}
+
+function playSuccess(){
+  const notes = [523.25,659.25,783.99,1046.5,1318.5];
+  notes.forEach((f,i) => setTimeout(()=>playNote(f,.35,'sine',.22), i*100));
+}
+
+// ─── LOOPING MUSIC ───
+const melody = [523.25,587.33,659.25,698.46,783.99,698.46,659.25,587.33,
+                523.25,587.33,659.25,523.25,349.23,392,440,523.25];
 let melIdx=0;
 function startMusicLoop(){
   if(musicInterval) return;
   musicInterval = setInterval(()=>{
     if(!musicPlaying) return;
-    playNote(melody[melIdx%melody.length], .4, 'sine', .18); melIdx++;
+    playNote(melody[melIdx%melody.length], .4, 'sine', .18);
+    // harmony
+    playNote(melody[melIdx%melody.length]*1.26, .4, 'sine', .06);
+    melIdx++;
   }, 380);
 }
-function stopMusicLoop(){ if(musicInterval){ clearInterval(musicInterval); musicInterval=null; } }
-function toggleMusic(){
-  initAudio(); musicPlaying = !musicPlaying;
-  const note = document.getElementById('music-note'); const label = document.getElementById('music-label');
-  if(musicPlaying){ startMusicLoop(); note.classList.remove('paused'); label.textContent = 'ปิดเพลง'; playChime(); }
-  else { stopMusicLoop(); note.classList.add('paused'); label.textContent = 'เปิดเพลง'; }
+
+function stopMusicLoop(){
+  if(musicInterval){ clearInterval(musicInterval); musicInterval=null; }
 }
 
-function getScreenEl(n){ return document.getElementById('s'+n); }
-function showScreen(n){
-  getScreenEl(currentScreen).classList.add('done'); getScreenEl(currentScreen).classList.remove('active');
-  currentScreen = n; const el = getScreenEl(n); el.classList.remove('done');
-  setTimeout(()=>el.classList.add('active'), 30);
-  const pct = Math.round((n/totalScreens)*100); document.getElementById('progress').style.width = pct+'%';
-  if(n>0 && n<14){ document.getElementById('step-ind').style.display='block'; document.getElementById('step-ind').textContent = `${n} / 13`; }
-  else { document.getElementById('step-ind').style.display='none'; }
-  showSpeech(speeches[n]||''); if(n===14){ launchConfetti(); playSuccess(); } else playClick();
+function toggleMusic(){
+  initAudio();
+  musicPlaying = !musicPlaying;
+  const note = document.getElementById('music-note');
+  const label = document.getElementById('music-label');
+  if(musicPlaying){
+    startMusicLoop();
+    note.classList.remove('paused');
+    label.textContent = 'ปิดเพลง';
+    playChime();
+  } else {
+    stopMusicLoop();
+    note.classList.add('paused');
+    label.textContent = 'เปิดเพลง';
+  }
 }
-function startQuiz(){ showScreen(1); }
-function nextScreen(){ if(currentScreen < 14) showScreen(currentScreen+1); }
-function checkInput(id, btnId){ const val = document.getElementById(id)?.value?.trim(); const btn = document.getElementById(btnId); if(btn) btn.disabled = !val; if(id==='q_name' && val) answers['ชื่อ'] = val; }
-function updAge(v){ document.getElementById('age-val').textContent = v+' ปี'; answers['อายุ'] = v+' ปี'; }
+
+// ─── NAVIGATION ───
+function getScreenEl(n){ return document.getElementById('s'+n); }
+
+function showScreen(n){
+  getScreenEl(currentScreen).classList.add('done');
+  getScreenEl(currentScreen).classList.remove('active');
+  currentScreen = n;
+  const el = getScreenEl(n);
+  el.classList.remove('done');
+  setTimeout(()=>el.classList.add('active'), 30);
+  const pct = Math.round((n/totalScreens)*100);
+  document.getElementById('progress').style.width = pct+'%';
+  if(n>0 && n<13){
+    document.getElementById('step-ind').style.display='block';
+    document.getElementById('step-ind').textContent = `${n} / 12`;
+  } else {
+    document.getElementById('step-ind').style.display='none';
+  }
+  showSpeech(speeches[n]||'');
+  if(n===13){ launchConfetti(); playSuccess(); catHappy(); }
+  else playClick();
+}
+
+function startQuiz(){
+  showScreen(1);
+  catThink(false);
+}
+
+function nextScreen(){
+  if(currentScreen < 12) showScreen(currentScreen+1);
+}
+
+// ─── INPUT HANDLERS ───
+function checkInput(id, btnId){
+  const val = document.getElementById(id)?.value?.trim();
+  const btn = document.getElementById(btnId);
+  if(btn) btn.disabled = !val;
+  if(id==='q_name' && val) answers['ชื่อ'] = val;
+}
+
+function updAge(v){
+  document.getElementById('age-val').textContent = v+' ปี';
+  answers['อายุ'] = v+' ปี';
+}
 document.getElementById('q_age').dispatchEvent(new Event('input'));
 
 function pick(key, val, el){
-  const label = { 'q_status':'สถานภาพ','q_job':'อาชีพ','q_income':'รายได้/เดือน','q_save':'อัตราการออม','q_risk':'ความเสี่ยง','q_problem':'ปัญหาหลัก','q_cat_type':'ประเภทแมว' };
-  answers[label[key]||key] = val; el.closest('.choices').querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected'); playClick(); setTimeout(()=>nextScreen(), 400);
+  const label = {
+    'q_status':'สถานภาพ','q_job':'อาชีพ','q_income':'รายได้/เดือน',
+    'q_save':'อัตราการออม','q_risk':'ความเสี่ยง','q_problem':'ปัญหาหลัก'
+  };
+  answers[label[key]||key] = val;
+  el.closest('.choices').querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  playClick();
+  setTimeout(()=>nextScreen(), 400);
 }
+
 function multiPick(key, val, el){
-  const label = { 'q_debt':'หนี้สิน','q_goal':'เป้าหมาย','q_invest':'ประสบการณ์ลงทุน' }; const k = label[key]||key;
+  const label = {
+    'q_debt':'หนี้สิน','q_goal':'เป้าหมาย','q_invest':'ประสบการณ์ลงทุน'
+  };
+  const k = label[key]||key;
   if(!multiAnswers[k]) multiAnswers[k]=new Set();
   if(el.classList.contains('selected')){ el.classList.remove('selected'); multiAnswers[k].delete(val); }
   else { el.classList.add('selected'); multiAnswers[k].add(val); }
   playClick();
 }
-function showSpeech(txt){ const el = document.getElementById('speech'); if(!txt){ el.classList.remove('show'); return; } el.textContent = txt; el.classList.remove('show'); setTimeout(()=>el.classList.add('show'), 200); }
 
+// ─── CAT ANIMATIONS ───
+function showSpeech(txt){
+  const el = document.getElementById('speech');
+  if(!txt){ el.classList.remove('show'); return; }
+  el.textContent = txt;
+  el.classList.remove('show');
+  setTimeout(()=>el.classList.add('show'), 200);
+}
+
+function catHappy(){
+  const c = document.getElementById('cat-svg');
+  c.classList.add('happy');
+  setTimeout(()=>c.classList.remove('happy'),1500);
+}
+
+function catThink(v){
+  const c = document.getElementById('cat-svg');
+  if(v) c.classList.add('thinking');
+  else c.classList.remove('thinking');
+}
+
+// ─── CAT TYPE DATA ───
+const CAT_TYPES = {
+  sphinx: {
+    emoji:'😿', name:'แมวสฟิงซ์', nick:'(ตึงเปรี๊ยะงดเนื้อสัตว์)',
+    desc:'รายได้น้อยกว่า 15,000 และออมเงินไม่ค่อยไหว สภาพการเงินตึงมือ เป็นเรื่องที่หนักมากเลยนะ แต่มีทางเริ่มต้นเสมอ 🤍',
+    tips:['🌱 เริ่มออม 50 บาท/วัน แค่นี้ก็สร้างนิสัยได้','💼 มองหารายได้เสริม เช่น งาน part-time, ขายของออนไลน์','📋 ขอคำปรึกษาสวัสดิการรัฐ เช่น บัตรสวัสดิการแห่งรัฐ']
+  },
+  stray: {
+    emoji:'😾', name:'แมวจรจัด', nick:'(หลบหนีหนี้สิน)',
+    desc:'หนี้เยอะ จ่ายไม่ทัน และไม่มีเงินออมเลย ฟังดูหนักมากเลยนะ แต่ไม่ต้องหนีคนเดียว มีทางออกเสมอ 🤍',
+    tips:['📋 List หนี้ทุกก้อนออกมาก่อน อย่าหนีตัวเลข','💡 ลอง Snowball จ่ายหนี้ก้อนเล็กก่อนเพื่อสร้างกำลังใจ','🆘 ปรึกษาสถาบันการเงินเรื่องรีไฟแนนซ์รวมหนี้']
+  },
+  orange: {
+    emoji:'🐱', name:'แมวส้มสู้ชีวิต', nick:'(เดอะแบก)',
+    desc:'รายได้ไม่พอกับรายจ่าย หรือต้องดูแลพ่อแม่และมีหนี้ เธอแบกทุกอย่างไว้คนเดียวแบบนั้นเหนื่อยมากเลยนะ 🧡',
+    tips:['🎯 ตั้ง "งบฉุกเฉิน" ก่อนเลย แม้แค่ 1,000 บาท/เดือน','📋 ทำบัญชีรายจ่ายทุกบาท หาตัวรั่วให้เจอ','💬 ปรึกษาที่ปรึกษาการเงินเพื่อวางแผนหนี้และครอบครัว']
+  },
+  supaluck: {
+    emoji:'😸', name:'แมวศุภลักษณ์', nick:'(สายเปย์เป๋าฉีก)',
+    desc:'รายได้ดีแต่ใช้เงินเก่งมาก ออมเงินไม่อยู่ เงินเข้ามาก็ออกไปเร็ว ชีวิตสนุกแต่อนาคตยังต้องวางแผนอีกนิดนึงนะ 💕',
+    tips:['🏦 ตั้งโอนออมทันทีที่เงินเข้า ก่อนใช้จ่าย','📱 ลอง envelope budgeting แบ่งเงินเป็นซองแต่ละหมวด','🎯 ตั้งเป้าออมระยะสั้น 3 เดือนก่อน เพื่อสร้างนิสัย']
+  },
+  scottish: {
+    emoji:'🛍️', name:'แมวสก็อตติช โฟลด์', nick:'(นักช้อปปิ้งออนไลน์)',
+    desc:'รายได้ดีแต่ติดผ่อนบัตรเครดิต/ผ่อนรถ ชื่นชอบการช้อปปิ้ง แอปช้อปปิ้งเป็นเพื่อนรัก แต่บัตรเครดิตอาจกลายเป็นเพื่อนร้ายได้นะ! 💜',
+    tips:['🚫 หยุดผ่อน 0% สิ่งที่ไม่จำเป็น','💳 จ่ายบัตรเต็มจำนวนทุกเดือน หลีกเลี่ยงดอกเบี้ย','📱 ลบแอปช้อปปิ้งออก 30 วัน แล้วดูผลลัพธ์']
+  },
+  wichian: {
+    emoji:'😺', name:'แมววิเชียรมาศ', nick:'(นักลงทุนฝึกหัด)',
+    desc:'ออมเงินได้บ้าง แต่อยากลงทุนแต่ไม่รู้จะเริ่มตรงไหน เธอมีฐานที่ดีแล้ว ถึงเวลาต่อยอดให้เงินทำงานแทนเธอบ้างแล้ว! 💜',
+    tips:['📦 เริ่มจาก "กองทุนรวม" ก่อน เสี่ยงน้อย เข้าใจง่าย','📚 เรียนรู้ผ่าน SET e-Learning ฟรี ที่ set.or.th','🎯 ลงทุนตาม goal: 1-3 ปี vs 10+ ปี กลยุทธ์ต่างกัน']
+  },
+  persian: {
+    emoji:'😻', name:'แมวเปอร์เซีย', nick:'(ชีวิตสโลว์ไลฟ์)',
+    desc:'รายได้ปานกลาง ออมนิ่ง ๆ ไม่มีหนี้สิน แต่ไม่มีแผนระยะยาว ชีวิตดูสงบแต่เงินอาจไม่โตตามที่ควรเลยนะ ☕',
+    tips:['🗓️ วางแผนเกษียณเดี๋ยวนี้เลย ยิ่งเริ่มเร็ว ยิ่งดี','📦 เพิ่มพอร์ตลงทุนจาก FD → กองทุนรวมผสม','🎯 ตั้ง "เป้าระยะยาว" ให้ชัดสัก 1 ข้อแล้วค่อยๆ ไป']
+  },
+  british: {
+    emoji:'😎', name:'แมวบริติช ช็อตแฮร์', nick:'(คุณชายเงินหนา)',
+    desc:'รายได้ค่อนข้างสูง ออมเงินได้เยอะ 20-30% มีวินัยทางการเงินที่ดีมาก ตอนนี้ก็ทำได้ดีแล้ว แต่ยังมีช่องให้ optimize อีกนะ 💎',
+    tips:['📊 เพิ่ม asset allocation ให้หลากหลายขึ้น','🏢 พิจารณา RMF/SSF เพื่อประหยัดภาษีสูงสุด','🌐 ลองลงทุนในต่างประเทศผ่าน LTF หรือกองทุน global']
+  },
+  bengal: {
+    emoji:'🐆', name:'แมวเบงกอล', nick:'(เถ้าแก่น้อยไฟแรง)',
+    desc:'เป็นเจ้าของธุรกิจ/ฟรีแลนซ์ เสี่ยงสูง ลุยลงทุนเต็มตัว พลังงานไฟแรงมาก แต่อย่าลืมสร้างเกราะป้องกันความเสี่ยงด้วยนะ 🐆',
+    tips:['🛡️ สร้างกองทุนฉุกเฉิน 6 เดือน ก่อนลงทุนต่อ','📊 แยกบัญชีส่วนตัว vs ธุรกิจให้ชัดเจน','🏥 ทำประกันสุขภาพ + ประกันชีวิตให้คุ้มครองพอ']
+  },
+  khaoManee: {
+    emoji:'👑', name:'แมวขาวมณี', nick:'(เศรษฐีคาบช้อนเงิน)',
+    desc:'ออมมากกว่า 30% รายได้สูง แทบไม่มีปัญหาการเงิน เธอคือแมวในฝันของที่ปรึกษาการเงินทุกคนเลย! 👑',
+    tips:['🌐 เพิ่ม international diversification ให้พอร์ต','🏢 พิจารณา wealth management / private fund','🎁 วางแผนส่งต่อความมั่งคั่ง estate planning']
+  }
+};
+
+function determineCatType(){
+  const inc  = answers['รายได้/เดือน'] || '';
+  const sav  = answers['อัตราการออม']  || '';
+  const prob = answers['ปัญหาหลัก']    || '';
+  const job  = answers['อาชีพ']        || '';
+  const stat = answers['สถานภาพ']      || '';
+  const debt = answers['หนี้สิน']      || '';
+
+  const hasDebt = (d) => debt.includes(d);
+  const noDebt  = debt.includes('ไม่มีหนี้เลย');
+
+  // Sphinx: รายได้น้อย + ออมไม่ได้
+  if(inc.includes('น้อยกว่า 15,000') && (sav.includes('ไม่มีเลย') || sav.includes('น้อยกว่า 10')))
+    return 'sphinx';
+  // Stray: หนี้เยอะ จ่ายไม่ทัน
+  if(prob.includes('หนี้เยอะ') && sav.includes('ไม่มีเลย'))
+    return 'stray';
+  // Orange: รายได้ไม่พอ หรือดูแลพ่อแม่
+  if(prob.includes('รายได้ไม่พอ') || stat.includes('ดูแลพ่อแม่'))
+    return 'orange';
+  // Khao Manee: ออม > 30%, รายได้สูง
+  if(sav.includes('มากกว่า 30%') && (inc.includes('50,000') || inc.includes('100,000')))
+    return 'khaoManee';
+  // British: ออม 20-30%
+  if(sav.includes('20-30%'))
+    return 'british';
+  // Bengal: ธุรกิจ/ฟรีแลนซ์
+  if(job.includes('ฟรีแลนซ์') || job.includes('เจ้าของธุรกิจ'))
+    return 'bengal';
+  // Scottish: บัตรเครดิต + ออมไม่ได้ หรือชอบช้อป
+  if((hasDebt('บัตรเครดิต') || hasDebt('ผ่อนรถ')) && prob.includes('ใช้เงินเก่งมาก'))
+    return 'scottish';
+  // Supaluck: รายได้ดีแต่ออมไม่อยู่
+  if(sav.includes('ไม่มีเลย') && !inc.includes('น้อยกว่า 15,000'))
+    return 'supaluck';
+  // Wichian: ไม่รู้จะลงทุน
+  if(prob.includes('ไม่รู้จะลงทุน'))
+    return 'wichian';
+  // Persian: ไม่มีแผนระยะยาว
+  if(prob.includes('ไม่มีแผนระยะยาว') || noDebt)
+    return 'persian';
+
+  // Fallback by saving
+  if(sav.includes('มากกว่า 30%')) return 'khaoManee';
+  if(sav.includes('20-30%'))       return 'british';
+  if(sav.includes('10-20%'))       return 'wichian';
+  return 'orange';
+}
+
+function buildCatTypeCard(){
+  const key = determineCatType();
+  const c   = CAT_TYPES[key];
+  document.getElementById('ct-emoji').textContent = c.emoji;
+  document.getElementById('ct-name').textContent  = c.name;
+  document.getElementById('ct-nick').textContent  = c.nick;
+  document.getElementById('ct-desc').textContent  = c.desc;
+  document.getElementById('ct-tips').innerHTML    = c.tips.map(t=>`<div class="cat-type-tip">${t}</div>`).join('');
+  answers['ประเภทแมว'] = c.name + ' ' + c.nick;
+}
+
+// ─── RESULT ───
 function showResult(){
-  const phone = document.getElementById('q_phone')?.value||''; const email = document.getElementById('q_email')?.value||'';
-  answers['เบอร์โทร/LINE'] = phone; if(email) answers['อีเมล'] = email;
+  const phone = document.getElementById('q_phone')?.value||'';
+  const email = document.getElementById('q_email')?.value||'';
+  answers['เบอร์โทร/LINE'] = phone;
+  if(email) answers['อีเมล'] = email;
+  // multi answers
   Object.entries(multiAnswers).forEach(([k,v])=>{ answers[k]=[...v].join(', '); });
   answers['วันที่กรอก'] = new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
-  
-  buildResultCard(); showScreen(14);
-
-  if (GOOGLE_SHEET_WEB_APP_URL && GOOGLE_SHEET_WEB_APP_URL !== "ใส่_WEB_APP_URL_ที่นี่") {
-    fetch(GOOGLE_SHEET_WEB_APP_URL, {
-      method: "POST",
-      mode: "no-cors",
-      cache: "no-cache",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(answers)
-    }).catch(err => console.log(err));
-  }
+  buildCatTypeCard();
+  buildResultCard();
+  showScreen(13);
 }
 
 function buildResultCard(){
-  const name = answers['ชื่อ']||'คุณ'; document.getElementById('result-title').textContent = `เยี่ยมมากเลย ${name}! 🎉`;
-  let html=''; const order=['ชื่อ','อายุ','สถานภาพ','อาชีพ','รายได้/เดือน','อัตราการออม','หนี้สิน','เป้าหมาย','ความเสี่ยง','ประสบการณ์ลงทุน','ปัญหาหลัก','ประเภทแมว','เบอร์โทร/LINE','อีเมล','วันที่กรอก'];
-  order.forEach(k=>{ if(answers[k]) html+=`<div class="result-row"><span class="result-label">${k}</span><span class="result-val">${answers[k]}</span></div>`; });
+  const name = answers['ชื่อ']||'คุณ';
+  document.getElementById('result-title').textContent = `เยี่ยมมากเลย ${name}! 🎉`;
+  let html='';
+  const order=['ชื่อ','อายุ','สถานภาพ','อาชีพ','รายได้/เดือน','อัตราการออม','หนี้สิน','เป้าหมาย','ความเสี่ยง','ประสบการณ์ลงทุน','ปัญหาหลัก','ประเภทแมว','เบอร์โทร/LINE','อีเมล','วันที่กรอก'];
+  order.forEach(k=>{
+    if(answers[k]) html+=`<div class="result-row"><span class="result-label">${k}</span><span class="result-val">${answers[k]}</span></div>`;
+  });
   document.getElementById('result-card').innerHTML=html;
 }
+
+// ─── EXPORT ───
 function getRows(){
-  const rows=[['หัวข้อ','คำตอบ']]; const order=['ชื่อ','อายุ','สถานภาพ','อาชีพ','รายได้/เดือน','อัตราการออม','หนี้สิน','เป้าหมาย','ความเสี่ยง','ประสบการณ์ลงทุน','ปัญหาหลัก','ประเภทแมว','เบอร์โทร/LINE','อีเมล','วันที่กรอก'];
-  order.forEach(k=>{ if(answers[k]) rows.push([k,answers[k]]); }); return rows;
+  const rows=[['หัวข้อ','คำตอบ']];
+  const order=['ชื่อ','อายุ','สถานภาพ','อาชีพ','รายได้/เดือน','อัตราการออม','หนี้สิน','เป้าหมาย','ความเสี่ยง','ประสบการณ์ลงทุน','ปัญหาหลัก','ประเภทแมว','เบอร์โทร/LINE','อีเมล','วันที่กรอก'];
+  order.forEach(k=>{ if(answers[k]) rows.push([k,answers[k]]); });
+  return rows;
 }
+
 function downloadCSV(){
-  const rows=getRows(); const csv='\ufeff'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=`finance_${answers['ชื่อ']||'client'}.csv`; a.click();
+  const rows=getRows();
+  const csv='\ufeff'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`finance_${answers['ชื่อ']||'client'}.csv`;
+  a.click();
+  playSuccess();
 }
+
 function downloadExcel(){
-  const rows=getRows(); let xml=`<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="ข้อมูลลูกค้า"><Table>`;
-  rows.forEach(r=>{ xml+=`<Row>`; r.forEach(c=>{ xml+=`<Cell><Data ss:Type="String">${String(c).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</Data></Cell>`; }); xml+=`</Row>`; });
-  xml+=`</Table></Worksheet></Workbook>`; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([xml],{type:'application/vnd.ms-excel'})); a.download=`finance_plan_${answers['ชื่อ']||'client'}.xls`; a.click();
+  const rows=getRows();
+  let xml=`<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="ข้อมูลลูกค้า"><Table>`;
+  rows.forEach(r=>{
+    xml+=`<Row>`;
+    r.forEach(c=>{ xml+=`<Cell><Data ss:Type="String">${String(c).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</Data></Cell>`; });
+    xml+=`</Row>`;
+  });
+  xml+=`</Table></Worksheet></Workbook>`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([xml],{type:'application/vnd.ms-excel'}));
+  a.download=`finance_plan_${answers['ชื่อ']||'client'}.xls`;
+  a.click();
+  playSuccess();
 }
+
+// ─── CONFETTI ───
 function launchConfetti(){
-  const wrap=document.getElementById('confetti'); const colors=['#FF7A3D','#FFD166','#FF9A5C','#FFF0E6','#FF7A9A'];
+  const wrap=document.getElementById('confetti');
+  const colors=['#FF7A3D','#FFD166','#FF9A5C','#FFF0E6','#FF7A9A'];
   for(let i=0;i<40;i++){
-    const el=document.createElement('div'); el.className='confetti';
-    el.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[i%colors.length]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.8}s`;
+    const el=document.createElement('div');
+    el.className='confetti';
+    el.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[i%colors.length]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>0.5?'50%':'2px'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.8}s`;
     wrap.appendChild(el);
   }
   setTimeout(()=>wrap.innerHTML='',4000);
 }
+
+// ─── INIT ───
 showSpeech('สวัสดีจ้า! ฉันมะโหนก 🧡');
+setTimeout(()=>showSpeech('กดปุ่มเปิดเพลงด้านบนก็ได้นะ 🎵'),3000);
 </script>
 </body>
 </html>
