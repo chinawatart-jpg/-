@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แมวส้มพามาวางแผนการเงิน 🐱</title>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --orange:#FF7A3D;
+    --orange-light:#FFE8D6;
+    --yellow:#FFD166;
+    --cream:#FFF8F0;
+    --peach:#FFF0E6;
+    --charcoal:#2D2D2D;
+    --muted:#9B8B7E;
+    --white:#FFFFFF;
+    --shadow: 0 8px 32px rgba(255,122,61,0.12);
+  }
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    font-family:'Sarabun',sans-serif;
+    background:var(--cream);
+    color:var(--charcoal);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* ── MUSIC TOGGLE ── */
+  .music-btn{
+    position:fixed;top:16px;right:16px;z-index:999;
+    background:var(--white);border:none;border-radius:50px;
+    padding:8px 16px;cursor:pointer;
+    font-family:'Mitr',sans-serif;font-size:13px;font-weight:500;
+    color:var(--orange);
+    box-shadow:0 2px 12px rgba(255,122,61,0.2);
+    display:flex;align-items:center;gap:6px;
+    transition:all .2s;
+  }
+  .music-btn:hover{box-shadow:0 4px 20px rgba(255,122,61,0.3);transform:translateY(-1px)}
+  .music-note{font-size:16px;animation:bounce-note 1.5s infinite}
+  @keyframes bounce-note{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-4px) rotate(10deg)}}
+  .music-note.paused{animation:none}
+
+  /* ── PROGRESS ── */
+  .progress-wrap{
+    position:fixed;top:0;left:0;right:0;height:4px;z-index:998;
+    background:rgba(255,122,61,0.15);
+  }
+  .progress-fill{
+    height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+    border-radius:0 4px 4px 0;
+  }
+
+  /* ── SCREENS ── */
+  .screen{
+    min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:80px 24px 120px;position:relative;
+    opacity:0;transform:translateY(30px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .screen.active{opacity:1;transform:translateY(0)}
+  .screen.done{opacity:0;transform:translateY(-30px);pointer-events:none;position:absolute;width:100%}
+
+  /* ── CAT ── */
+  .cat-wrap{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:480px;
+    display:flex;align-items:flex-end;justify-content:flex-start;
+    padding:0 20px 0;
+    z-index:100;pointer-events:none;
+  }
+  .cat-container{position:relative;width:120px;flex-shrink:0}
+  .cat-svg{width:120px;height:120px;animation:cat-idle 3s ease-in-out infinite}
+  @keyframes cat-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .cat-svg.thinking{animation:cat-think 0.5s ease-in-out infinite alternate}
+  @keyframes cat-think{0%{transform:rotate(-3deg)}100%{transform:rotate(3deg)}}
+  .cat-svg.happy{animation:cat-happy 0.4s ease-in-out 3}
+  @keyframes cat-happy{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.05)}}
+
+  .speech-bubble{
+    position:absolute;bottom:105px;left:5px;
+    background:var(--white);border-radius:18px 18px 18px 4px;
+    padding:10px 14px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    font-family:'Mitr',sans-serif;font-size:13px;font-weight:400;
+    color:var(--charcoal);max-width:200px;line-height:1.4;
+    border:1.5px solid var(--orange-light);
+    opacity:0;transform:scale(0.8) translateY(10px);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    pointer-events:none;
+  }
+  .speech-bubble.show{opacity:1;transform:scale(1) translateY(0)}
+  .speech-bubble::after{
+    content:'';position:absolute;bottom:-10px;left:14px;
+    border:5px solid transparent;border-top-color:var(--white);
+  }
+
+  /* ── CONTENT CARDS ── */
+  .content-box{
+    width:100%;max-width:440px;
+    background:var(--white);border-radius:24px;
+    padding:32px 28px;
+    box-shadow:var(--shadow);
+    border:1.5px solid var(--orange-light);
+    margin-bottom:16px;
+  }
+  .screen-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--orange-light);
+    color:var(--orange);font-family:'Mitr',sans-serif;font-size:12px;font-weight:500;
+    padding:4px 12px;border-radius:20px;margin-bottom:16px;
+  }
+  .screen-q{
+    font-family:'Mitr',sans-serif;font-size:22px;font-weight:600;
+    color:var(--charcoal);line-height:1.4;margin-bottom:8px;
+  }
+  .screen-sub{
+    font-family:'Sarabun',sans-serif;font-size:14px;color:var(--muted);
+    line-height:1.6;margin-bottom:24px;
+  }
+
+  /* ── CHOICES ── */
+  .choices{display:flex;flex-direction:column;gap:10px;width:100%;max-width:440px}
+  .choice-btn{
+    background:var(--white);border:1.5px solid #E8E0D8;
+    border-radius:16px;padding:14px 18px;
+    font-family:'Mitr',sans-serif;font-size:15px;font-weight:400;
+    color:var(--charcoal);cursor:pointer;
+    display:flex;align-items:center;gap:12px;
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    text-align:left;
+  }
+  .choice-btn:hover{
+    border-color:var(--orange);background:var(--orange-light);
+    transform:translateX(4px);
+  }
+  .choice-btn.selected{
+    border-color:var(--orange);background:var(--orange);color:var(--white);
+    transform:translateX(4px);
+  }
+  .choice-emoji{font-size:20px;flex-shrink:0}
+
+  /* ── TEXT INPUT ── */
+  .text-input-wrap{width:100%;max-width:440px;margin-top:4px}
+  .text-input-wrap input,.text-input-wrap select{
+    width:100%;padding:14px 18px;
+    border:1.5px solid #E8E0D8;border-radius:16px;
+    font-family:'Sarabun',sans-serif;font-size:16px;color:var(--charcoal);
+    background:var(--white);outline:none;
+    transition:border-color .2s;
+  }
+  .text-input-wrap input:focus,.text-input-wrap select:focus{border-color:var(--orange)}
+  .next-btn{
+    margin-top:12px;width:100%;padding:15px;
+    background:var(--orange);color:var(--white);border:none;border-radius:16px;
+    font-family:'Mitr',sans-serif;font-size:16px;font-weight:500;
+    cursor:pointer;transition:all .2s;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .next-btn:hover{background:#e86830;transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,122,61,0.35)}
+  .next-btn:disabled{background:#E8E0D8;color:var(--muted);transform:none;cursor:not-allowed}
+
+  /* ── RANGE SLIDER ── */
+  .range-wrap{width:100%;max-width:440px;background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--orange-light)}
+  .range-wrap input[type=range]{width:100%;margin:10px 0;accent-color:var(--orange)}
+  .range-val{font-family:'Mitr',sans-serif;font-size:28px;font-weight:600;color:var(--orange);text-align:center}
+  .range-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+
+  /* ── INTRO SCREEN ── */
+  .intro-emoji{font-size:80px;animation:float 3s ease-in-out infinite;display:block;text-align:center;margin-bottom:16px}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+  .intro-title{font-family:'Mitr',sans-serif;font-size:32px;font-weight:600;text-align:center;line-height:1.3;margin-bottom:8px;color:var(--charcoal)}
+  .intro-sub{font-family:'Sarabun',sans-serif;font-size:16px;color:var(--muted);text-align:center;line-height:1.7;max-width:360px;margin:0 auto 28px}
+  .start-btn{
+    background:var(--orange);color:var(--white);border:none;border-radius:50px;
+    padding:16px 40px;font-family:'Mitr',sans-serif;font-size:18px;font-weight:500;
+    cursor:pointer;transition:all .3s;
+    box-shadow:0 6px 24px rgba(255,122,61,0.35);
+    animation:pulse-btn 2s infinite;
+  }
+  @keyframes pulse-btn{0%,100%{box-shadow:0 6px 24px rgba(255,122,61,0.35)}50%{box-shadow:0 6px 36px rgba(255,122,61,0.55)}}
+  .start-btn:hover{transform:translateY(-3px) scale(1.03)}
+
+  /* ── RESULT / FINAL ── */
+  .result-card{
+    width:100%;max-width:440px;
+    background:var(--white);border-radius:24px;padding:28px;
+    box-shadow:var(--shadow);border:1.5px solid var(--orange-light);
+    margin-bottom:12px;
+  }
+  .result-title{font-family:'Mitr',sans-serif;font-size:20px;font-weight:600;margin-bottom:16px;color:var(--charcoal)}
+  .result-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5EDE6;font-size:14px}
+  .result-row:last-child{border-bottom:none}
+  .result-label{color:var(--muted)}
+  .result-val{font-weight:500;color:var(--charcoal);text-align:right;max-width:55%}
+  .dl-btn{
+    width:100%;max-width:440px;padding:16px;
+    background:var(--orange);color:var(--white);border:none;border-radius:16px;
+    font-family:'Mitr',sans-serif;font-size:16px;font-weight:500;
+    cursor:pointer;margin-bottom:10px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:all .2s;box-shadow:0 4px 16px rgba(255,122,61,0.3);
+  }
+  .dl-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,122,61,0.4)}
+  .dl-btn.secondary{background:var(--white);color:var(--orange);border:1.5px solid var(--orange)}
+  .confetti-wrap{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:200}
+  .confetti{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall linear forwards}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+  /* ── MULTI-SELECT ── */
+  .multi-choices{display:flex;flex-wrap:wrap;gap:8px;width:100%;max-width:440px}
+  .multi-chip{
+    padding:8px 16px;border-radius:50px;
+    border:1.5px solid #E8E0D8;background:var(--white);
+    font-family:'Mitr',sans-serif;font-size:14px;color:var(--charcoal);
+    cursor:pointer;transition:all .2s;
+  }
+  .multi-chip:hover{border-color:var(--orange);background:var(--orange-light)}
+  .multi-chip.selected{border-color:var(--orange);background:var(--orange);color:var(--white)}
+
+  .bottom-pad{height:140px}
+  .step-indicator{
+    position:fixed;bottom:130px;left:50%;transform:translateX(-50%);
+    font-family:'Mitr',sans-serif;font-size:12px;color:var(--muted);
+    background:rgba(255,255,255,.9);padding:4px 12px;border-radius:20px;
+    backdrop-filter:blur(8px);z-index:99;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+<button class="music-btn" onclick="toggleMusic()" id="music-btn">
+  <span class="music-note" id="music-note">🎵</span>
+  <span id="music-label">เปิดเพลง</span>
+</button>
+
+<div class="cat-wrap">
+  <div class="cat-container">
+    <div class="speech-bubble" id="speech"></div>
+    <svg class="cat-svg" id="cat-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="60" cy="88" rx="34" ry="28" fill="#FF9A5C"/>
+      <ellipse cx="60" cy="92" rx="20" ry="18" fill="#FFD4A8"/>
+      <ellipse cx="60" cy="56" rx="30" ry="28" fill="#FF9A5C"/>
+      <polygon points="34,34 28,14 46,28" fill="#FF9A5C"/>
+      <polygon points="86,34 92,14 74,28" fill="#FF9A5C"/>
+      <polygon points="35,32 31,18 44,29" fill="#FFB8C6"/>
+      <polygon points="85,32 89,18 76,29" fill="#FFB8C6"/>
+      <ellipse cx="50" cy="52" rx="6" ry="7" fill="#2D2D2D" id="eye-l"/>
+      <ellipse cx="70" cy="52" rx="6" ry="7" fill="#2D2D2D" id="eye-r"/>
+      <circle cx="52" cy="50" r="2" fill="white"/>
+      <circle cx="72" cy="50" r="2" fill="white"/>
+      <ellipse cx="60" cy="62" rx="4" ry="3" fill="#FF7A9A"/>
+      <path d="M56 65 Q60 69 64 65" stroke="#FF7A9A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <line x1="30" y1="60" x2="52" y2="63" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
+      <line x1="30" y1="65" x2="52" y2="65" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
+      <line x1="68" y1="63" x2="90" y2="60" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
+      <line x1="68" y1="65" x2="90" y2="65" stroke="#9B8B7E" stroke-width="1" opacity=".6"/>
+      <path d="M92 100 Q110 80 104 64 Q98 52 108 46" stroke="#FF9A5C" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <ellipse cx="44" cy="112" rx="12" ry="8" fill="#FF9A5C"/>
+      <ellipse cx="76" cy="112" rx="12" ry="8" fill="#FF9A5C"/>
+      <path d="M50 36 Q60 32 70 36" stroke="#E8824A" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+      <path d="M52 30 Q60 26 68 30" stroke="#E8824A" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+    </svg>
+  </div>
+</div>
+<div class="step-indicator" id="step-ind" style="display:none"></div>
+
+<div class="screen active" id="s0" style="text-align:center;padding-top:100px">
+  <span class="intro-emoji">🐱</span>
+  <h1 class="intro-title">สวัสดีจ้า!<br>ฉันชื่อ มะโหนก 🧡</h1>
+  <p class="intro-sub">แมวส้มผู้ช่วยวางแผนการเงิน<br>วันนี้ฉันจะพาไปค้นหาว่า<br><strong>เงินของเธอหายไปไหน</strong> แล้วจัดระเบียบมันใหม่ด้วยกันนะ 🐾</p>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:24px">ใช้เวลาแค่ 3-4 นาที · ง่ายมาก · ไม่ตัดสิน</p>
+  <button class="start-btn" onclick="startQuiz()">เริ่มเลย! เมี้ยว 🐾</button>
+</div>
+
+<div class="screen" id="s1">
+  <div class="content-box">
+    <span class="screen-tag">👋 รู้จักกันก่อนนะ</span>
+    <div class="screen-q">เธอชื่ออะไรอ่ะ? 🐾</div>
+    <div class="screen-sub">มะโหนกจะได้เรียกชื่อถูก ๆ</div>
+    <div class="text-input-wrap">
+      <input type="text" id="q_name" placeholder="พิมพ์ชื่อเลยจ้า..." oninput="checkInput('q_name','btn1')"/>
+    </div>
+  </div>
+  <button class="next-btn" id="btn1" disabled onclick="nextScreen()">ต่อไปเลย 🐾</button>
+</div>
+
+<div class="screen" id="s2">
+  <div class="content-box">
+    <span class="screen-tag">🎂 อายุ</span>
+    <div class="screen-q">เธออายุเท่าไหร่แล้วอ่ะ?</div>
+    <div class="screen-sub">ไม่ได้จะแอบบอกใคร สัญญา 🤫</div>
+  </div>
+  <div class="range-wrap">
+    <div class="range-val" id="age-val">25 ปี</div>
+    <input type="range" min="18" max="65" value="25" id="q_age" oninput="updAge(this.value)"/>
+    <div class="range-labels"><span>18 ปี</span><span>40 ปี</span><span>65 ปี</span></div>
+  </div>
+  <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:12px">โอเคเลย 👌</button>
+</div>
+
+<div class="screen" id="s3">
+  <div class="content-box">
+    <span class="screen-tag">💑 ชีวิตส่วนตัว</span>
+    <div class="screen-q">ตอนนี้เป็นยังไงบ้างอ่ะ?</div>
+    <div class="screen-sub">ถามเพื่อวางแผนให้เหมาะสมนะ ไม่ได้แอบชอบนะ 🙈</div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="pick('q_status','โสด',this)"><span class="choice-emoji">🐱</span> โสดและภูมิใจ</button>
+    <button class="choice-btn" onclick="pick('q_status','แต่งงานแล้ว',this)"><span class="choice-emoji">💑</span> แต่งงานแล้ว / มีคู่</button>
+    <button class="choice-btn" onclick="pick('q_status','มีลูก',this)"><span class="choice-emoji">👨‍👩‍👧</span> มีลูกแล้ว (หรือกำลังจะมี)</button>
+    <button class="choice-btn" onclick="pick('q_status','ดูแลพ่อแม่',this)"><span class="choice-emoji">🏠</span> ต้องดูแลพ่อแม่ด้วย</button>
+  </div>
+</div>
+
+<div class="screen" id="s4">
+  <div class="content-box">
+    <span class="screen-tag">💼 งาน</span>
+    <div class="screen-q">ทำอะไรอยู่ตอนนี้?</div>
+    <div class="screen-sub">รายได้ของเธอมาจากไหน? 🤔</div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="pick('q_job','พนักงานบริษัท',this)"><span class="choice-emoji">🏢</span> พนักงานบริษัท / ราชการ</button>
+    <button class="choice-btn" onclick="pick('q_job','ฟรีแลนซ์',this)"><span class="choice-emoji">💻</span> ฟรีแลนซ์ / งานอิสระ</button>
+    <button class="choice-btn" onclick="pick('q_job','เจ้าของธุรกิจ',this)"><span class="choice-emoji">🏪</span> เจ้าของธุรกิจ / SME</button>
+    <button class="choice-btn" onclick="pick('q_job','นักศึกษา',this)"><span class="choice-emoji">📚</span> นักศึกษา</button>
+    <button class="choice-btn" onclick="pick('q_job','อื่นๆ',this)"><span class="choice-emoji">✨</span> อื่น ๆ</button>
+  </div>
+</div>
+
+<div class="screen" id="s5">
+  <div class="content-box">
+    <span class="screen-tag">💰 รายได้</span>
+    <div class="screen-q">แต่ละเดือนได้ประมาณเท่าไหร่?</div>
+    <div class="screen-sub">นับรวมทุกทาง ทั้งเงินเดือน งานเสริม ฯลฯ</div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="pick('q_income','น้อยกว่า 15,000',this)"><span class="choice-emoji">🌱</span> น้อยกว่า 15,000 บาท</button>
+    <button class="choice-btn" onclick="pick('q_income','15,000-30,000',this)"><span class="choice-emoji">🌿</span> 15,000 – 30,000 บาท</button>
+    <button class="choice-btn" onclick="pick('q_income','30,000-50,000',this)"><span class="choice-emoji">🌳</span> 30,000 – 50,000 บาท</button>
+    <button class="choice-btn" onclick="pick('q_income','50,000-100,000',this)"><span class="choice-emoji">🌲</span> 50,000 – 100,000 บาท</button>
+    <button class="choice-btn" onclick="pick('q_income','มากกว่า 100,000',this)"><span class="choice-emoji">🏔️</span> มากกว่า 100,000 บาท</button>
+  </div>
+</div>
+
+<div class="screen" id="s6">
+  <div class="content-box">
+    <span class="screen-tag">🐷 การออม</span>
+    <div class="screen-q">ออมได้เดือนละกี่เปอร์เซ็นต์ของรายได้?</div>
+    <div class="screen-sub">ตอบตามความจริงนะ ไม่ตัดสิน ฉันแค่แมวส้ม 🧡</div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="pick('q_save','ไม่มีเลย ใช้หมดทุกเดือน',this)"><span class="choice-emoji">😅</span> ไม่มีเลย ใช้หมดทุกเดือน</button>
+    <button class="choice-btn" onclick="pick('q_save','น้อยกว่า 10%',this)"><span class="choice-emoji">🙈</span> น้อยกว่า 10%</button>
+    <button class="choice-btn" onclick="pick('q_save','10-20%',this)"><span class="choice-emoji">😊</span> ประมาณ 10-20%</button>
+    <button class="choice-btn" onclick="pick('q_save','20-30%',this)"><span class="choice-emoji">😎</span> 20-30%</button>
+    <button class="choice-btn" onclick="pick('q_save','มากกว่า 30%',this)"><span class="choice-emoji">🤩</span> มากกว่า 30%!</button>
+  </div>
+</div>
+
+<div class="screen" id="s7">
+  <div class="content-box">
+    <span class="screen-tag">💳 หนี้สิน</span>
+    <div class="screen-q">มีหนี้อยู่บ้างไหม?</div>
+    <div class="screen-sub">เลือกได้หลายอย่างเลยนะ ไม่ตัดสิน มะโหนกก็เคยเป็นหนี้ค่าอาหารแมว 🐟</div>
+  </div>
+  <div class="multi-choices" id="debt-mc">
+    <div class="multi-chip" onclick="multiPick('q_debt','ไม่มีหนี้เลย!',this)">😇 ไม่มีหนี้!</div>
+    <div class="multi-chip" onclick="multiPick('q_debt','ผ่อนบ้าน',this)">🏠 ผ่อนบ้าน</div>
+    <div class="multi-chip" onclick="multiPick('q_debt','ผ่อนรถ',this)">🚗 ผ่อนรถ</div>
+    <div class="multi-chip" onclick="multiPick('q_debt','บัตรเครดิต',this)">💳 บัตรเครดิต</div>
+    <div class="multi-chip" onclick="multiPick('q_debt','สินเชื่อส่วนบุคคล',this)">📋 สินเชื่อส่วนบุคคล</div>
+    <div class="multi-chip" onclick="multiPick('q_debt','กยศ.',this)">📚 กยศ.</div>
+  </div>
+  <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">ต่อไปเลย</button>
+</div>
+
+<div class="screen" id="s8">
+  <div class="content-box">
+    <span class="screen-tag">🎯 เป้าหมาย</span>
+    <div class="screen-q">อยากได้อะไรจากเงินของเธอ?</div>
+    <div class="screen-sub">เลือกทุกอย่างที่อยู่ในใจเลย ฝันใหญ่ ๆ ก็ได้ 🌟</div>
+  </div>
+  <div class="multi-choices">
+    <div class="multi-chip" onclick="multiPick('q_goal','เกษียณสบาย',this)">🏖️ เกษียณสบาย</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','ซื้อบ้าน',this)">🏠 ซื้อบ้าน</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','ซื้อรถ',this)">🚗 ซื้อรถ</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','ท่องเที่ยว',this)">✈️ ท่องเที่ยว</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','ลงทุน',this)">📈 ลงทุน</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','เปิดธุรกิจ',this)">🏪 เปิดธุรกิจ</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','ส่งลูกเรียน',this)">📚 ส่งลูกเรียน</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','จ่ายหนี้ให้หมด',this)">🎉 จ่ายหนี้ให้หมด</div>
+    <div class="multi-chip" onclick="multiPick('q_goal','มีเงินสำรอง',this)">🏦 มีเงินสำรองฉุกเฉิน</div>
+  </div>
+  <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">นั่นแหละ! ต่อเลย 🐾</button>
+</div>
+
+<div class="screen" id="s9">
+  <div class="content-box">
+    <span class="screen-tag">⚖️ ความเสี่ยง</span>
+    <div class="screen-q">ถ้าลงทุนแล้วเงินลด 20%<br>เธอจะทำยังไง?</div>
+    <div class="screen-sub">ตอบตามความรู้สึกจริง ๆ ของเธอนะ 🤔</div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="pick('q_risk','ต่ำ',this)"><span class="choice-emoji">😱</span> ขายทิ้งเลย! ทนไม่ไหว</button>
+    <button class="choice-btn" onclick="pick('q_risk','ต่ำ-กลาง',this)"><span class="choice-emoji">😟</span> กังวลมาก แต่ยังถือไว้ก่อน</button>
+    <button class="choice-btn" onclick="pick('q_risk','กลาง',this)"><span class="choice-emoji">😐</span> ก็กังวลนิดหน่อย รอดูก่อนแล้วกัน</button>
+    <button class="choice-btn" onclick="pick('q_risk','กลาง-สูง',this)"><span class="choice-emoji">😏</span> โอเค ซื้อเพิ่มไปเลย ถูกดี</button>
+    <button class="choice-btn" onclick="pick('q_risk','สูง',this)"><span class="choice-emoji">😎</span> ดีเลย ซื้อซ้ำ 2 เท่า!</button>
+  </div>
+</div>
+
+<div class="screen" id="s10">
+  <div class="content-box">
+    <span class="screen-tag">📊 การลงทุน</span>
+    <div class="screen-q">เคยลงทุนอะไรบ้างแล้ว?</div>
+    <div class="screen-sub">เลือกทุกอย่างที่เคยทำได้เลย 👇</div>
+  </div>
+  <div class="multi-choices">
+    <div class="multi-chip" onclick="multiPick('q_invest','ยังไม่เคยเลย',this)">🌱 ยังไม่เคย</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','เงินฝาก',this)">🏦 เงินฝาก</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','กองทุนรวม',this)">📦 กองทุนรวม</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','หุ้น',this)">📈 หุ้น</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','ทองคำ',this)">🥇 ทองคำ</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','คริปโท',this)">🪙 คริปโท</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','ประกันชีวิต',this)">🛡️ ประกันชีวิต</div>
+    <div class="multi-chip" onclick="multiPick('q_invest','อสังหาฯ',this)">🏘️ อสังหาฯ</div>
+  </div>
+  <button class="next-btn" onclick="nextScreen()" style="max-width:440px;margin-top:16px">ต่อเลย!</button>
+</div>
+
+<div class="screen" id="s11">
+  <div class="content-box">
+    <span class="screen-tag">🔍 ปัญหา</span>
+    <div class="screen-q">ถามตรง ๆ เลยนะ 👀<br>ปัญหาใหญ่สุดของเธอตอนนี้คืออะไร?</div>
+    <div class="screen-sub">เลือกอันที่ "ใช่" ที่สุดก็พอ</div>
+  </div>
+  <div class="choices">
+    <button class="choice-btn" onclick="pick('q_problem','ใช้เงินเก่งมาก ออมไม่อยู่',this)"><span class="choice-emoji">💸</span> ใช้เงินเก่งมาก ออมไม่อยู่</button>
+    <button class="choice-btn" onclick="pick('q_problem','หนี้เยอะ จ่ายไม่ทัน',this)"><span class="choice-emoji">😰</span> หนี้เยอะ จ่ายไม่ทัน</button>
+    <button class="choice-btn" onclick="pick('q_problem','ไม่รู้จะลงทุนอะไรดี',this)"><span class="choice-emoji">🤷</span> ไม่รู้จะลงทุนอะไรดี</button>
+    <button class="choice-btn" onclick="pick('q_problem','รายได้ไม่พอ',this)"><span class="choice-emoji">😤</span> รายได้ยังไม่พอกับรายจ่าย</button>
+    <button class="choice-btn" onclick="pick('q_problem','ไม่มีแผนระยะยาว',this)"><span class="choice-emoji">🗺️</span> ไม่มีแผนระยะยาวเลย</button>
+  </div>
+</div>
+
+<div class="screen" id="s12">
+  <div class="content-box">
+    <span class="screen-tag">📱 ติดต่อ</span>
+    <div class="screen-q">จะได้ส่งแผนให้เธอนะ!<br>ฝากเบอร์หรือ LINE ไว้ได้เลย 🐾</div>
+    <div class="screen-sub">ข้อมูลใช้เพื่อติดต่อเท่านั้น สัญญา</div>
+    <div class="text-input-wrap" style="margin-bottom:12px">
+      <input type="tel" id="q_phone" placeholder="เบอร์โทรหรือ LINE ID..." oninput="checkInput('q_phone','btn12')"/>
+    </div>
+    <div class="text-input-wrap">
+      <input type="email" id="q_email" placeholder="อีเมล (ไม่บังคับ)"/>
+    </div>
+  </div>
+  <button class="next-btn" id="btn12" disabled onclick="showResult()">ดูผลเลย! 🎉</button>
+</div>
+
+<div class="screen" id="s13">
+  <div class="confetti-wrap" id="confetti"></div>
+  <div style="text-align:center;margin-bottom:20px">
+    <div style="font-size:48px;margin-bottom:8px">🎉</div>
+    <div style="font-family:'Mitr',sans-serif;font-size:24px;font-weight:600;margin-bottom:4px" id="result-title">เยี่ยมมาก!</div>
+    <div style="font-size:14px;color:var(--muted)">มะโหนกรู้จักเธอแล้ว ต่อไปนี้คือข้อมูลของเธอ</div>
+  </div>
+  <div class="result-card" id="result-card"></div>
+  <button class="dl-btn" onclick="downloadExcel()">📊 ดาวน์โหลด Excel เพื่อวิเคราะห์</button>
+  <button class="dl-btn secondary" onclick="downloadCSV()">📄 ดาวน์โหลด CSV</button>
+  <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px;max-width:440px">มะโหนกขอบคุณมากเลย 🧡<br>ที่ปรึกษาจะติดต่อกลับเร็ว ๆ นี้นะ!</div>
+  <div class="bottom-pad"></div>
+</div>
+
+<div class="bottom-pad"></div>
+
+<script>
+// ─── DATA ───
+const answers = {};
+const multiAnswers = {};
+let currentScreen = 0;
+const totalScreens = 13;
+let audioCtx = null;
+let musicPlaying = false;
+let musicInterval = null;
+
+// 🔗 วางลิงก์ Web App URL ที่ได้จาก Google Sheets (Apps Script) ตรงนี้จ้า
+const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyn1s4C-xfTKgHL2koOi4v97cLgSCf04VpnMHW0CRSczKVXly3qoxgXApStwN4stT0C/exec";
+
+// ─── CAT SPEECHES per screen ───
+const speeches = [
+  '', // s0 handled separately
+  'เมี้ยว~ บอกชื่อมาได้เลยนะ!',
+  'อ่อ อายุขนาดนี้เหรอ! ดีมาก ๆ',
+  'โอเค ๆ จดไว้แล้ว',
+  'งานดี = เงินดี เริ่มต้นดีนะ!',
+  'รู้จักรายได้แล้ว มาต่อกันเลย',
+  'เมี้ยว~ ออมได้มากยิ่งดีนะ!',
+  'หนี้เป็นเรื่องปกติ แก้ได้จ้า',
+  'เป้าหมายชัด = ทำสำเร็จง่าย!',
+  'ตอบตามใจเลยนะ ไม่มีผิดถูก',
+  'ลงทุนเก่งแล้ว หรือเพิ่งเริ่มก็ดี!',
+  'ซื่อสัตย์กับตัวเองได้ ดีมากเลย',
+  'เกือบเสร็จแล้ว! เมี้ยว~ 🧡',
+];
+
+// ─── AUDIO ENGINE ───
+function initAudio(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+}
+
+function playNote(freq, duration, type='sine', gain=0.3){
+  if(!audioCtx || !musicPlaying) return;
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.connect(g); g.connect(audioCtx.destination);
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  g.gain.setValueAtTime(0, audioCtx.currentTime);
+  g.gain.linearRampToValueAtTime(gain, audioCtx.currentTime + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.start(audioCtx.currentTime);
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+function playChime(){
+  const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+  notes.forEach((f,i) => setTimeout(()=>playNote(f,.4,'sine',.2), i*120));
+}
+
+function playClick(){
+  playNote(880, 0.1, 'sine', 0.15);
+}
+
+function playSuccess(){
+  const notes = [523.25,659.25,783.99,1046.5,1318.5];
+  notes.forEach((f,i) => setTimeout(()=>playNote(f,.35,'sine',.22), i*100));
+}
+
+// ─── LOOPING MUSIC ───
+const melody = [523.25,587.33,659.25,698.46,783.99,698.46,659.25,587.33,
+                523.25,587.33,659.25,523.25,349.23,392,440,523.25];
+let melIdx=0;
+function startMusicLoop(){
+  if(musicInterval) return;
+  musicInterval = setInterval(()=>{
+    if(!musicPlaying) return;
+    playNote(melody[melIdx%melody.length], .4, 'sine', .18);
+    // harmony
+    playNote(melody[melIdx%melody.length]*1.26, .4, 'sine', .06);
+    melIdx++;
+  }, 380);
+}
+
+function stopMusicLoop(){
+  if(musicInterval){ clearInterval(musicInterval); musicInterval=null; }
+}
+
+function toggleMusic(){
+  initAudio();
+  musicPlaying = !musicPlaying;
+  const note = document.getElementById('music-note');
+  const label = document.getElementById('music-label');
+  if(musicPlaying){
+    startMusicLoop();
+    note.classList.remove('paused');
+    label.textContent = 'ปิดเพลง';
+    playChime();
+  } else {
+    stopMusicLoop();
+    note.classList.add('paused');
+    label.textContent = 'เปิดเพลง';
+  }
+}
+
+// ─── NAVIGATION ───
+function getScreenEl(n){ return document.getElementById('s'+n); }
+
+function showScreen(n){
+  getScreenEl(currentScreen).classList.add('done');
+  getScreenEl(currentScreen).classList.remove('active');
+  currentScreen = n;
+  const el = getScreenEl(n);
+  el.classList.remove('done');
+  setTimeout(()=>el.classList.add('active'), 30);
+  const pct = Math.round((n/totalScreens)*100);
+  document.getElementById('progress').style.width = pct+'%';
+  if(n>0 && n<13){
+    document.getElementById('step-ind').style.display='block';
+    document.getElementById('step-ind').textContent = `${n} / 12`;
+  } else {
+    document.getElementById('step-ind').style.display='none';
+  }
+  showSpeech(speeches[n]||'');
+  if(n===13){ launchConfetti(); playSuccess(); catHappy(); }
+  else playClick();
+}
+
+function startQuiz(){
+  showScreen(1);
+  catThink(false);
+}
+
+function nextScreen(){
+  if(currentScreen < 12) showScreen(currentScreen+1);
+}
+
+// ─── INPUT HANDLERS ───
+function checkInput(id, btnId){
+  const val = document.getElementById(id)?.value?.trim();
+  const btn = document.getElementById(btnId);
+  if(btn) btn.disabled = !val;
+  if(id==='q_name' && val) answers['ชื่อ'] = val;
+}
+
+function updAge(v){
+  document.getElementById('age-val').textContent = v+' ปี';
+  answers['อายุ'] = v+' ปี';
+}
+document.getElementById('q_age').dispatchEvent(new Event('input'));
+
+function pick(key, val, el){
+  const label = {
+    'q_status':'สถานภาพ','q_job':'อาชีพ','q_income':'รายได้/เดือน',
+    'q_save':'อัตราการออม','q_risk':'ความเสี่ยง','q_problem':'ปัญหาหลัก'
+  };
+  answers[label[key]||key] = val;
+  el.closest('.choices').querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  playClick();
+  setTimeout(()=>nextScreen(), 400);
+}
+
+function multiPick(key, val, el){
+  const label = {
+    'q_debt':'หนี้สิน','q_goal':'เป้าหมาย','q_invest':'ประสบการณ์ลงทุน'
+  };
+  const k = label[key]||key;
+  if(!multiAnswers[k]) multiAnswers[k]=new Set();
+  if(el.classList.contains('selected')){ el.classList.remove('selected'); multiAnswers[k].delete(val); }
+  else { el.classList.add('selected'); multiAnswers[k].add(val); }
+  playClick();
+}
+
+// ─── CAT ANIMATIONS ───
+function showSpeech(txt){
+  const el = document.getElementById('speech');
+  if(!txt){ el.classList.remove('show'); return; }
+  el.textContent = txt;
+  el.classList.remove('show');
+  setTimeout(()=>el.classList.add('show'), 200);
+}
+
+function catHappy(){
+  const c = document.getElementById('cat-svg');
+  c.classList.add('happy');
+  setTimeout(()=>c.classList.remove('happy'),1500);
+}
+
+function catThink(v){
+  const c = document.getElementById('cat-svg');
+  if(v) c.classList.add('thinking');
+  else c.classList.remove('thinking');
+}
+
+// ─── RESULT & SEND TO GOOGLE SHEETS ───
+function showResult(){
+  const phone = document.getElementById('q_phone')?.value||'';
+  const email = document.getElementById('q_email')?.value||'';
+  answers['เบอร์โทร/LINE'] = phone;
+  if(email) answers['อีเมล'] = email;
+  
+  // multi answers
+  Object.entries(multiAnswers).forEach(([k,v])=>{ answers[k]=[...v].join(', '); });
+  answers['วันที่กรอก'] = new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  
+  buildResultCard();
+  showScreen(13);
+
+  // 🚀 ส่งข้อมูลไปที่ Google Sheets (ทำงานอยู่เบื้องหลังเรียลไทม์)
+  if (GOOGLE_SHEET_WEB_APP_URL && GOOGLE_SHEET_WEB_APP_URL !== "ใส่_WEB_APP_URL_ที่นี่") {
+    catThink(true);
+    fetch(GOOGLE_SHEET_WEB_APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(answers)
+    })
+    .then(() => {
+      console.log("ส่งข้อมูลไป Google Sheets เรียบร้อยแล้ว 🐱✨");
+      catThink(false);
+      catHappy();
+    })
+    .catch(err => {
+      console.error("เกิดข้อผิดพลาดในการส่งข้อมูล:", err);
+      catThink(false);
+    });
+  }
+}
+
+function buildResultCard(){
+  const name = answers['ชื่อ']||'คุณ';
+  document.getElementById('result-title').textContent = `เยี่ยมมากเลย ${name}! 🎉`;
+  let html='';
+  const order=['ชื่อ','อายุ','สถานภาพ','อาชีพ','รายได้/เดือน','อัตราการออม','หนี้สิน','เป้าหมาย','ความเสี่ยง','ประสบการณ์ลงทุน','ปัญหาหลัก','เบอร์โทร/LINE','อีเมล','วันที่กรอก'];
+  order.forEach(k=>{
+    if(answers[k]) html+=`<div class="result-row"><span class="result-label">${k}</span><span class="result-val">${answers[k]}</span></div>`;
+  });
+  document.getElementById('result-card').innerHTML=html;
+}
+
+// ─── EXPORT ───
+function getRows(){
+  const rows=[['หัวข้อ','คำตอบ']];
+  const order=['ชื่อ','อายุ','สถานภาพ','อาชีพ','รายได้/เดือน','อัตราการออม','หนี้สิน','เป้าหมาย','ความเสี่ยง','ประสบการณ์ลงทุน','ปัญหาหลัก','เบอร์โทร/LINE','อีเมล','วันที่กรอก'];
+  order.forEach(k=>{ if(answers[k]) rows.push([k,answers[k]]); });
+  return rows;
+}
+
+function downloadCSV(){
+  const rows=getRows();
+  const csv='\ufeff'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`finance_${answers['ชื่อ']||'client'}.csv`;
+  a.click();
+  playSuccess();
+}
+
+function downloadExcel(){
+  const rows=getRows();
+  let xml=`<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="ข้อมูลลูกค้า"><Table>`;
+  rows.forEach(r=>{
+    xml+=`<Row>`;
+    r.forEach(c=>{ xml+=`<Cell><Data ss:Type="String">${String(c).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</Data></Cell>`; });
+    xml+=`</Row>`;
+  });
+  xml+=`</Table></Worksheet></Workbook>`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([xml],{type:'application/vnd.ms-excel'}));
+  a.download=`finance_plan_${answers['ชื่อ']||'client'}.xls`;
+  a.click();
+  playSuccess();
+}
+
+// ─── CONFETTI ───
+function launchConfetti(){
+  const wrap=document.getElementById('confetti');
+  const colors=['#FF7A3D','#FFD166','#FF9A5C','#FFF0E6','#FF7A9A'];
+  for(let i=0;i<40;i++){
+    const el=document.createElement('div');
+    el.className='confetti';
+    el.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[i%colors.length]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>0.5?'50%':'2px'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.8}s`;
+    wrap.appendChild(el);
+  }
+  setTimeout(()=>wrap.innerHTML='',4000);
+}
+
+// ─── INIT ───
+showSpeech('สวัสดีจ้า! ฉันมะโหนก 🧡');
+setTimeout(()=>showSpeech('กดปุ่มเปิดเพลงด้านบนก็ได้นะ 🎵'),3000);
+</script>
+</body>
+</html>
